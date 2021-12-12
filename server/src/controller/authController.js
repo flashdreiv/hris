@@ -1,7 +1,10 @@
 import { OAuth2Client } from "google-auth-library";
 import User from "../models/user.js";
+import RefreshToken from "../models/refreshtoken.js";
+import jwt from "jsonwebtoken";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 const login = async (req, res) => {
   const { token } = req.body;
   try {
@@ -13,18 +16,33 @@ const login = async (req, res) => {
     const user = await User.findOneAndUpdate(
       { email },
       { name, picture },
-      { upsert: true }
+      { upsert: true, new: true }
     );
-    req.session.userId = user.id;
-    res.status(201).json(user);
+    const accessToken = jwt.sign(
+      { id: user.id },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "10d" }
+    );
+    const refreshToken = jwt.sign(
+      { id: user.id },
+      process.env.REFRESH_TOKEN_SECRET
+    );
+    const dbRefreshToken = new RefreshToken({ user, token: refreshToken });
+    await dbRefreshToken.save();
+    res.status(201).json({ user, token: { accessToken, refreshToken } });
   } catch (err) {
     res.status(400).json({ message: "Error logging in" });
   }
 };
 
 const logout = async (req, res) => {
-  await req.session.destroy();
-  res.status(200).json({ message: "Logout successful" });
+  const { refreshToken } = req.body;
+  try {
+    await RefreshToken.deleteOne({ token: refreshToken });
+    return res.status(200).json({ message: "Logout successful" });
+  } catch (err) {
+    return res.status(400);
+  }
 };
 
 export { login, logout };

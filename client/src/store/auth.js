@@ -32,6 +32,10 @@ const auth = (set, get) => ({
 
   signOut: async () => {
     try {
+      const refreshToken = get().userData.token.refreshToken;
+      await api.post("/auth/logout", {
+        refreshToken: refreshToken,
+      });
       set(
         produce((state) => {
           localStorage.removeItem("userInfo");

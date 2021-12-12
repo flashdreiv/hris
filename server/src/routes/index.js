@@ -1,20 +1,12 @@
 import { Router } from "express";
 import authRouter from "./authRoute.js";
-import User from "../models/user.js";
+import { authToken, generateRefreshToken } from "../middleware/authorize.js";
+import timelogRouter from "./timelogRoute.js";
 const router = Router();
 
 router.use("/auth", authRouter);
-
-router.use(async (req, res) => {
-  try {
-    const user = await User.findById(req.session.id);
-    req.user = user;
-    next();
-  } catch {
-    res
-      .status(401)
-      .json({ error: "You are not authorized to perform that action" });
-  }
-});
+router.use(authToken);
+router.post("/token", generateRefreshToken);
+router.use("/timelog", timelogRouter);
 
 export default router;

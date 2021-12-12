@@ -14,8 +14,8 @@ const Sidebar = () => {
         style={{ height: "100%" }}
       >
         <SubMenu key="sub1" icon={<UserOutlined />} title="Time Attendance">
-          <Menu.Item key="1">View Timelog</Menu.Item>
-          <Menu.Item key="2">Timelog Request</Menu.Item>
+          <Menu.Item key="1">Clock-In</Menu.Item>
+          <Menu.Item key="2">Timelog Correction</Menu.Item>
         </SubMenu>
       </Menu>
     </Sider>
