@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const TimelogCorrectionSchema = mongoose.Schema({
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
   timelog: {
     type: Schema.Types.ObjectId,
     ref: "timelogs",
@@ -14,16 +18,24 @@ const TimelogCorrectionSchema = mongoose.Schema({
   oldTimeOut: {
     type: Date,
   },
+  newTimeIn: {
+    type: Date,
+  },
+  newTimeOut: {
+    type: Date,
+  },
   approver: {
     type: Schema.Types.ObjectId,
     ref: "users",
   },
   status: {
-    type: Boolean,
+    type: String,
+    enum: ["Pending", "Approved", "Rejected"],
+    default: "Pending",
   },
 });
 
-const TimelogCorrection = mongoose.connect(
+const TimelogCorrection = mongoose.model(
   "timelogcorrections",
   TimelogCorrectionSchema
 );
