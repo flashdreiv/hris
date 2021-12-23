@@ -1,11 +1,8 @@
 {
-	"folders": [
-		{
-			"path": "../.."
-		},
-		{
-			"path": "../../../mern"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "../.."
+    }
+  ],
+  "settings": {}
 }

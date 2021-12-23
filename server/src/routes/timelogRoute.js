@@ -9,6 +9,8 @@ import {
 import {
   addTimelogCorrection,
   getTimelogCorrections,
+  updateTimelogCorrection,
+  deleteTimelogCorrection,
 } from "../controller/timelogcorrectionController.js";
 const router = Router();
 
@@ -17,8 +19,12 @@ router
   .route("/correction")
   .get(getTimelogCorrections)
   .post(addTimelogCorrection);
+router
+  .route("/correction/:timelogId")
+  .patch(updateTimelogCorrection)
+  .delete(deleteTimelogCorrection);
 router.get("/:page", getTimeLogs);
 router.route("").post(timeIn).patch(timeOut);
-router.get("/:timelogId", getTimeLog);
+router.route("/:timelogId").get(getTimeLog);
 
 export default router;

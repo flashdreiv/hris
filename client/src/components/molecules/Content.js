@@ -15,7 +15,7 @@ const ContentSection = () => {
       <Content style={{ padding: "0 24px", minHeight: 280 }}>
         <Routes>
           <Route
-            path=""
+            path="/"
             element={
               <ProtectedRoute>
                 <ClockIn />

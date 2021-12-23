@@ -1,6 +1,8 @@
 import TimeLog from "../models/timelog.js";
 import User from "../models/user.js";
 import { endOfDay, startOfDay } from "date-fns";
+import { findExactDate } from "../utils/date.js";
+
 const getTimeLogs = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -77,14 +79,7 @@ const timeOut = async (req, res) => {
 
 const timeCheckStatus = async (req, res) => {
   try {
-    const start = startOfDay(new Date());
-    const end = endOfDay(new Date());
-    const timelog = await TimeLog.findOne({
-      createdAt: {
-        $gte: start,
-        $lt: end,
-      },
-    });
+    const timelog = await findExactDate(undefined, TimeLog);
     if (timelog) {
       if (timelog.timeOut) {
         return res.json("Disabled");

@@ -44,7 +44,7 @@ const HeaderSection = () => {
       </Span>
       <Menu mode="horizontal" defaultSelectedKeys={["1"]}>
         <MenuItem key="1">Home</MenuItem>
-        <MenuItem key="2" onClick={openModal} end>
+        <MenuItem key="2" onClick={openModal} end="true">
           Logout
         </MenuItem>
       </Menu>

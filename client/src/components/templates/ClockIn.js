@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Table } from "antd";
 import TimeActionButton from "../atoms/TimeActionButton";
 import Clock from "../atoms/Clock";
-import columns from "../atoms/tablecolumns";
+import { timelogColumn } from "../atoms/tablecolumns";
 import useStore from "../../store";
 
 const ClockIn = () => {
@@ -22,7 +22,7 @@ const ClockIn = () => {
       </Card>
       <br />
       <Table
-        columns={columns}
+        columns={timelogColumn}
         rowKey={(r) => r._id}
         size="small"
         dataSource={timelogs?.data && Object.values(timelogs.data)}

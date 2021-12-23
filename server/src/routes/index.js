@@ -8,7 +8,7 @@ const router = Router();
 router.use("/auth", authRouter);
 router.use(authToken);
 router.post("/token", generateRefreshToken);
-router.use("/timelog", timelogRouter);
 router.use("/users", userRouter);
+router.use("/timelog", timelogRouter);
 
 export default router;

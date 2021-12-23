@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Select, Input, Button, DatePicker, TimePicker } from "antd";
+import { Form, Select, Input, DatePicker, TimePicker } from "antd";
 
 const { Option } = Select;
 const layout = {
@@ -10,22 +10,22 @@ const layout = {
     span: 13,
   },
 };
-const tailLayout = {
-  wrapperCol: {
-    offset: 8,
-    span: 16,
-  },
-};
 
-const CorrectionForm = ({ approvers, onSubmit }) => {
+const CorrectionForm = ({ approvers, form, initialValues }) => {
   const renderApprovers = () =>
     approvers.map((approver) => (
       <Option value={approver._id} key={approver._id}>
-        {approver.email}
+        {approver.name}
       </Option>
     ));
+
   return (
-    <Form {...layout} name="control-ref" onFinish={onSubmit}>
+    <Form
+      {...layout}
+      name="control-ref"
+      form={form}
+      initialValues={initialValues}
+    >
       <Form.Item
         name="timelog"
         label="Date"
@@ -35,12 +35,32 @@ const CorrectionForm = ({ approvers, onSubmit }) => {
           },
         ]}
       >
-        <DatePicker />
+        <DatePicker
+          disabledDate={(current) => {
+            return new Date() < current;
+          }}
+        />
       </Form.Item>
-      <Form.Item name="timeIn" label="Time-In">
+      <Form.Item
+        name="timeIn"
+        label="Time-In"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
         <TimePicker use12Hours format="h:mm a" />
       </Form.Item>
-      <Form.Item name="timeOut" label="Time-Out">
+      <Form.Item
+        name="timeOut"
+        label="Time-Out"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
         <TimePicker use12Hours format="h:mm a" />
       </Form.Item>
       <Form.Item
@@ -77,16 +97,6 @@ const CorrectionForm = ({ approvers, onSubmit }) => {
             </Form.Item>
           ) : null
         }
-      </Form.Item>
-      <Form.Item {...tailLayout}>
-        <Button
-          type="primary"
-          htmlType="submit"
-          style={{ marginRight: "10px" }}
-        >
-          Submit
-        </Button>
-        <Button htmlType="button">Reset</Button>
       </Form.Item>
     </Form>
   );
