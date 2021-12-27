@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Select, Input, DatePicker, TimePicker } from "antd";
+import { Form, Select, DatePicker, Input, TimePicker } from "antd";
 
 const { Option } = Select;
 const layout = {
@@ -77,6 +77,17 @@ const CorrectionForm = ({ approvers, form, initialValues }) => {
         </Select>
       </Form.Item>
       <Form.Item
+        name="remarks"
+        label="Remarks"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Input.TextArea />
+      </Form.Item>
+      {/* <Form.Item
         noStyle
         shouldUpdate={(prevValues, currentValues) =>
           prevValues.gender !== currentValues.gender
@@ -97,7 +108,7 @@ const CorrectionForm = ({ approvers, form, initialValues }) => {
             </Form.Item>
           ) : null
         }
-      </Form.Item>
+      </Form.Item> */}
     </Form>
   );
 };

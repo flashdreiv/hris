@@ -33,7 +33,12 @@ const TimelogCorrectionSchema = mongoose.Schema({
     enum: ["Pending", "Approved", "Rejected"],
     default: "Pending",
   },
+  remarks: {
+    type: String,
+  },
 });
+
+TimelogCorrectionSchema.index({ timelog: 1 }, { unique: true });
 
 const TimelogCorrection = mongoose.model(
   "timelogcorrections",

@@ -1,6 +1,7 @@
 import TimelogCorrection from "../models/timelogcorrection.js";
 import TimeLog from "../models/timelog.js";
 import { findExactDate } from "../utils/date.js";
+import User from "../models/user.js";
 
 const getTimelogCorrections = async (req, res) => {
   try {
@@ -23,37 +24,49 @@ const getTimelogCorrections = async (req, res) => {
 };
 
 const addTimelogCorrection = async (req, res) => {
-  //ADD UNIQUE ADDITION
   try {
-    const { timelog, newTimeIn, newTimeOut, approver } = req.body;
+    const { timelog, newTimeIn, newTimeOut, approver, remarks } = req.body;
     const timelogObj = await findExactDate(timelog, TimeLog);
-    const newTimelogCorrection = new TimelogCorrection({
+    let newTimelogCorrection = await TimelogCorrection.create({
       timelog: timelogObj._id,
       newTimeIn,
       newTimeOut,
       approver,
+      remarks,
     });
-    await newTimelogCorrection.save();
+    newTimelogCorrection = await newTimelogCorrection.populate(
+      "approver timelog"
+    );
+
     return res.status(201).json(newTimelogCorrection);
   } catch (err) {
-    return res.json(err);
+    return res.json(err.message);
   }
 };
 
 const updateTimelogCorrection = async (req, res) => {
   try {
-    const { newTimeIn, newTimeOut, approver } = req.body;
+    const { newTimeIn, newTimeOut, approver, remarks } = req.body;
+    const _approver = await User.findById(approver);
     const updatedTimelogCorrection = await TimelogCorrection.findOneAndUpdate(
       {
         _id: req.params.timelogId,
         "timelogs.user.id": req.user.id,
       },
-      { $set: { newTimeIn, newTimeOut, approver } },
+      { newTimeIn, newTimeOut, approver: _approver, remarks },
       { new: true }
-    );
+    )
+      .populate({
+        path: "approver",
+        select: "name",
+      })
+      .populate({
+        path: "timelog",
+        select: "createdAt",
+      });
     return res.json(updatedTimelogCorrection);
   } catch (err) {
-    return res.json(error);
+    return res.status(403).json(err);
   }
 };
 

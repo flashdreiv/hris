@@ -33,10 +33,12 @@ const Correction = () => {
   const parseSubmission = (data) => {
     const timelog = data["timelog"].format("YYYY-MM-DD");
     return {
+      id: modal.type === "add" ? null : selectedTLC.id,
       timelog: timelog,
       newTimeIn: data["timeIn"]?.format(`${timelog} HH:mm:ss`) ?? undefined,
       newTimeOut: data["timeOut"]?.format(`${timelog} HH:mm:ss`) ?? undefined,
       approver: data["approver"],
+      remarks: data["remarks"],
     };
   };
 
@@ -47,11 +49,13 @@ const Correction = () => {
       .then((values) => {
         modal.type === "add"
           ? addTimelogCorrection(parseSubmission(values))
-          : updateTimelogCorrection(values);
-        form.resetFields();
+          : updateTimelogCorrection(parseSubmission(values));
+        // form.resetFields();
+        message.success("Timelog correction saved successfully");
+        setModal({ open: false });
       })
-      .catch(() => {
-        message.error("Unable to save that one");
+      .catch((err) => {
+        message.error("Unable to save that one " + err);
       });
     setConfirmLoading(false);
   };

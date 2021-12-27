@@ -21,14 +21,19 @@ const timelogcorrection = (set, get) => ({
       set(
         produce((state) => {
           state.selectedTimelogCorrection = response.data;
-          state.timelogCorrections[response.data._id] = response.data;
+          state.timelogCorrections[data.id] = response.data;
         })
       );
     } catch (err) {}
   },
-  updateTimelogCorrection: async (correctionId) => {
+  updateTimelogCorrection: async (data) => {
     try {
-      console.log("Updated this one");
+      const response = await api.patch(`/timelog/correction/${data.id}`, data);
+      set(
+        produce((state) => {
+          state.timelogCorrections[data.id] = response.data;
+        })
+      );
     } catch (err) {}
   },
   deleteTimelogCorrection: async (correctionId) => {

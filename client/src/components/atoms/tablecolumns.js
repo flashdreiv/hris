@@ -9,7 +9,7 @@ const checkDate = (date) => {
   if (date === "Invalid Date") {
     return "None";
   }
-  return date ? date : "None";
+  return date;
 };
 
 const timelogColumn = [
@@ -53,7 +53,7 @@ const timelogCorrectionColumn = (
     key: "createdAt",
     defaultSortOrder: "descend",
     render: (createdAt) => {
-      return createdAt ? returnDate(createdAt).toLocaleDateString() : "None";
+      return checkDate(returnDate(createdAt)?.toLocaleDateString());
     },
   },
   {
@@ -62,9 +62,7 @@ const timelogCorrectionColumn = (
     key: "timelog",
     defaultSortOrder: "descend",
     render: (timelog) => {
-      return timelog
-        ? returnDate(timelog.createdAt).toLocaleDateString()
-        : "None";
+      return checkDate(returnDate(timelog?.createdAt)?.toLocaleDateString());
     },
   },
   {
@@ -72,24 +70,20 @@ const timelogCorrectionColumn = (
     dataIndex: "newTimeIn",
     key: "newTimeIn",
     render: (newTimeIn) =>
-      newTimeIn
-        ? checkDate(
-            returnDate(newTimeIn).toLocaleTimeString([], { timeStyle: "short" })
-          )
-        : "None",
+      checkDate(
+        returnDate(newTimeIn)?.toLocaleTimeString([], { timeStyle: "short" })
+      ),
   },
   {
     title: "Time-Out",
     key: "newTimeOut",
     dataIndex: "newTimeOut",
     render: (newTimeOut) =>
-      newTimeOut
-        ? checkDate(
-            returnDate(newTimeOut).toLocaleTimeString([], {
-              timeStyle: "short",
-            })
-          )
-        : "None",
+      checkDate(
+        returnDate(newTimeOut)?.toLocaleTimeString([], {
+          timeStyle: "short",
+        })
+      ),
   },
   {
     title: "Status",
@@ -110,7 +104,7 @@ const timelogCorrectionColumn = (
     title: "Approver",
     key: "approver",
     dataIndex: "approver",
-    render: (approver) => (approver ? approver.name : "None"),
+    render: (approver) => approver?.name ?? "",
   },
   {
     title: "Action",
@@ -122,10 +116,12 @@ const timelogCorrectionColumn = (
           size="small"
           onClick={() => {
             const formattedObj = {
+              id: record._id,
               timelog: record.createdAt && moment(record.createdAt),
               timeIn: record.newTimeIn && moment(record.newTimeIn),
               timeOut: record.newTimeOut && moment(record.newTimeOut),
-              approver: record.approver.name,
+              approver: record.approver._id,
+              remarks: record.remarks,
             };
             setSelectedTLC(formattedObj);
             setModal({ type: "edit", open: true });
@@ -141,6 +137,12 @@ const timelogCorrectionColumn = (
         </Popconfirm>
       </Space>
     ),
+  },
+  {
+    title: "Remarks",
+    key: "remarks",
+    dataIndex: "remarks",
+    render: (remarks) => <>{remarks.slice(0, 15) + "..."}</>,
   },
 ];
 
