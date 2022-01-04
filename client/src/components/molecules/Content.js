@@ -5,6 +5,7 @@ import Sidebar from "./Sidebar";
 import ClockIn from "../templates/ClockIn";
 import Correction from "../templates/Correction";
 import { Layout } from "antd";
+import Reports from "../templates/Reports";
 
 const { Content } = Layout;
 
@@ -27,6 +28,14 @@ const ContentSection = () => {
             element={
               <ProtectedRoute>
                 <Correction />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              <ProtectedRoute>
+                <Reports />
               </ProtectedRoute>
             }
           />

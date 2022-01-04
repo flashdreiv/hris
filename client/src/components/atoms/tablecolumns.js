@@ -5,13 +5,6 @@ const returnDate = (date) => {
   return date && new Date(date);
 };
 
-const checkDate = (date) => {
-  if (date === "Invalid Date") {
-    return "None";
-  }
-  return date;
-};
-
 const timelogColumn = [
   {
     title: "Date",
@@ -27,18 +20,15 @@ const timelogColumn = [
     dataIndex: "timeIn",
     key: "timeIn",
     render: (timeIn) =>
-      checkDate(
-        returnDate(timeIn).toLocaleTimeString([], { timeStyle: "short" })
-      ),
+      returnDate(timeIn).toLocaleTimeString([], { timeStyle: "short" }),
   },
   {
     title: "Time-Out",
     key: "timeOut",
     dataIndex: "timeOut",
     render: (timeOut) =>
-      checkDate(
-        returnDate(timeOut).toLocaleTimeString([], { timeStyle: "short" })
-      ),
+      returnDate(timeOut)?.toLocaleTimeString([], { timeStyle: "short" }) ??
+      "None",
   },
 ];
 
@@ -53,7 +43,7 @@ const timelogCorrectionColumn = (
     key: "createdAt",
     defaultSortOrder: "descend",
     render: (createdAt) => {
-      return checkDate(returnDate(createdAt)?.toLocaleDateString());
+      return returnDate(createdAt)?.toLocaleDateString() ?? "None";
     },
   },
   {
@@ -62,7 +52,7 @@ const timelogCorrectionColumn = (
     key: "timelog",
     defaultSortOrder: "descend",
     render: (timelog) => {
-      return checkDate(returnDate(timelog?.createdAt)?.toLocaleDateString());
+      return returnDate(timelog?.createdAt)?.toLocaleDateString() ?? "None";
     },
   },
   {
@@ -70,20 +60,17 @@ const timelogCorrectionColumn = (
     dataIndex: "newTimeIn",
     key: "newTimeIn",
     render: (newTimeIn) =>
-      checkDate(
-        returnDate(newTimeIn)?.toLocaleTimeString([], { timeStyle: "short" })
-      ),
+      returnDate(newTimeIn)?.toLocaleTimeString([], { timeStyle: "short" }) ??
+      "None",
   },
   {
     title: "Time-Out",
     key: "newTimeOut",
     dataIndex: "newTimeOut",
     render: (newTimeOut) =>
-      checkDate(
-        returnDate(newTimeOut)?.toLocaleTimeString([], {
-          timeStyle: "short",
-        })
-      ),
+      returnDate(newTimeOut)?.toLocaleTimeString([], {
+        timeStyle: "short",
+      }) ?? "None",
   },
   {
     title: "Status",
@@ -142,8 +129,30 @@ const timelogCorrectionColumn = (
     title: "Remarks",
     key: "remarks",
     dataIndex: "remarks",
-    render: (remarks) => <>{remarks.slice(0, 15) + "..."}</>,
+    render: (remarks) => <>{remarks && remarks.slice(0, 15) + "..."}</>,
   },
 ];
 
-export { timelogColumn, timelogCorrectionColumn };
+const timelogReportsColumn = [
+  ...timelogColumn,
+  {
+    title: "Total Hours",
+    key: "totalHours",
+    dataIndex: "totalHours",
+    render: (totalHours) => <>{totalHours && totalHours}</>,
+  },
+  {
+    title: "Overtime/Undertime",
+    key: "ot_ut",
+    dataIndex: "ot_ut",
+    render: (ot_ut) => <>{ot_ut && ot_ut}</>,
+  },
+  {
+    title: "Status",
+    key: "status",
+    dataIndex: "status",
+    render: (status) => <>{status && status}</>,
+  },
+];
+
+export { timelogColumn, timelogCorrectionColumn, timelogReportsColumn };
