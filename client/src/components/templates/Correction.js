@@ -47,11 +47,14 @@ const Correction = () => {
     form
       .validateFields()
       .then((values) => {
-        modal.type === "add"
-          ? addTimelogCorrection(parseSubmission(values))
-          : updateTimelogCorrection(parseSubmission(values));
-        // form.resetFields();
-        message.success("Timelog correction saved successfully");
+        if (modal.type === "add") {
+          addTimelogCorrection(parseSubmission(values));
+          form.resetFields();
+          message.success("Timelog correction saved successfully");
+        } else {
+          updateTimelogCorrection(parseSubmission(values));
+          message.success("Timelog correction updated successfully");
+        }
         setModal({ open: false });
       })
       .catch((err) => {
@@ -103,7 +106,10 @@ const Correction = () => {
     <React.Fragment>
       <Button
         type="primary"
-        onClick={() => setModal({ type: "add", open: true })}
+        onClick={() => {
+          setModal({ type: "add", open: true });
+          form.resetFields();
+        }}
         style={{ marginBottom: "10px" }}
       >
         Add new

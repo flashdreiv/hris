@@ -9,7 +9,6 @@ const getFromLocalStorage = () => {
 const AttendanceStatusTypes = {
   ABS: "ABSENT",
   LTI: "LATE_TIME_IN",
-  NTI: "NO_TIME_IN",
   NTO: "NO_TIME_OUT",
   PT: "PRESENT",
 };

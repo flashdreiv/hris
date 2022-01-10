@@ -2,6 +2,7 @@ import api from "../api";
 import { produce } from "immer";
 
 const report = (set, get) => ({
+  reportsSummary: {},
   getReportsSummary: async (dateFrom, dateTo) => {
     try {
       const response = await api.get("/reports", {
@@ -10,7 +11,7 @@ const report = (set, get) => ({
 
       set(
         produce((state) => {
-          state.timelogs.data = response.data;
+          state.reportsSummary = response.data;
         })
       );
     } catch (err) {

@@ -1,15 +1,16 @@
 import React from "react";
 import { Statistic, Row, Col, Card } from "antd";
-const ReportStatistics = (values) => {
+
+const ReportStatistics = ({ values }) => {
   return (
     <Row gutter={16} style={{ marginTop: "10px" }}>
       <Col span={8}>
         <Card>
           <Statistic
             title="Total Absent"
-            value={values.absent}
+            value={values.total_absent}
             precision={2}
-            valueStyle={{ color: "#3f8600" }}
+            valueStyle={{ color: "#cf1322" }}
           />
         </Card>
       </Col>
@@ -17,7 +18,7 @@ const ReportStatistics = (values) => {
         <Card>
           <Statistic
             title="Total Late"
-            value={values.late}
+            value={values.total_late}
             precision={2}
             valueStyle={{ color: "#cf1322" }}
           />
@@ -27,9 +28,9 @@ const ReportStatistics = (values) => {
         <Card>
           <Statistic
             title="Total Hours"
-            value={values.hours}
+            value={values.total_hours}
             precision={2}
-            valueStyle={{ color: "#cf1322" }}
+            valueStyle={{ color: "#3f8600" }}
           />
         </Card>
       </Col>

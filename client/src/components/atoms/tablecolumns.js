@@ -1,5 +1,6 @@
 import { Tag, Space, Button, Popconfirm } from "antd";
 import moment from "moment";
+import { AttendanceStatusTypes } from "../../utils";
 
 const returnDate = (date) => {
   return date && new Date(date);
@@ -137,21 +138,40 @@ const timelogReportsColumn = [
   ...timelogColumn,
   {
     title: "Total Hours",
-    key: "totalHours",
-    dataIndex: "totalHours",
-    render: (totalHours) => <>{totalHours && totalHours}</>,
+    key: "hours",
+    dataIndex: "hours",
+    render: (hours) => <>{hours && hours}</>,
   },
   {
     title: "Overtime/Undertime",
     key: "ot_ut",
     dataIndex: "ot_ut",
-    render: (ot_ut) => <>{ot_ut && ot_ut}</>,
+    render: (ot_ut) => {
+      return ot_ut >= 0 ? (
+        <Tag color="green">{ot_ut}</Tag>
+      ) : (
+        <Tag color="yellow">{Math.abs(ot_ut)}</Tag>
+      );
+    },
   },
   {
     title: "Status",
     key: "status",
     dataIndex: "status",
-    render: (status) => <>{status && status}</>,
+    render: (status) => {
+      switch (status) {
+        case AttendanceStatusTypes.PT:
+          return <Tag color="green">{status}</Tag>;
+        case AttendanceStatusTypes.NTO:
+          return <Tag color="yellow">{status}</Tag>;
+        case AttendanceStatusTypes.LTI:
+          return <Tag color="yellow">{status}</Tag>;
+        case AttendanceStatusTypes.ABS:
+          return <Tag color="red">{status}</Tag>;
+        default:
+          return <Tag color="green">{status}</Tag>;
+      }
+    },
   },
 ];
 
