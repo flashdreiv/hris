@@ -11,7 +11,7 @@ const layout = {
   },
 };
 
-const CorrectionForm = ({ approvers, form, initialValues }) => {
+const CorrectionForm = ({ approvers, form, initialValues, handleSubmit }) => {
   const renderApprovers = () =>
     approvers.map((approver) => (
       <Option value={approver._id} key={approver._id}>
@@ -22,9 +22,11 @@ const CorrectionForm = ({ approvers, form, initialValues }) => {
   return (
     <Form
       {...layout}
-      name="control-ref"
+      id="myForm"
       form={form}
+      name="form_in_modal"
       initialValues={initialValues}
+      onFinish={handleSubmit}
     >
       <Form.Item
         name="timelog"
@@ -87,28 +89,6 @@ const CorrectionForm = ({ approvers, form, initialValues }) => {
       >
         <Input.TextArea />
       </Form.Item>
-      {/* <Form.Item
-        noStyle
-        shouldUpdate={(prevValues, currentValues) =>
-          prevValues.gender !== currentValues.gender
-        }
-      >
-        {({ getFieldValue }) =>
-          getFieldValue("approver") === "other" ? (
-            <Form.Item
-              name="customizeApprover"
-              label="Customize Approver"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-          ) : null
-        }
-      </Form.Item> */}
     </Form>
   );
 };

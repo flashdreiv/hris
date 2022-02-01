@@ -2,6 +2,7 @@ import TimelogCorrection from "../models/timelogcorrection.js";
 import TimeLog from "../models/timelog.js";
 import { findExactDate } from "../utils/date.js";
 import User from "../models/user.js";
+import { MONGOOSE_ERROR_CODES } from "../utils/ErrorCodes.js";
 
 const getTimelogCorrections = async (req, res) => {
   try {
@@ -40,6 +41,9 @@ const addTimelogCorrection = async (req, res) => {
 
     return res.status(201).json(newTimelogCorrection);
   } catch (err) {
+    if (err.code === MONGOOSE_ERROR_CODES.DUPLICATE_ENTRIES) {
+      return res.json({ error: "Timelog correction already exist" });
+    }
     return res.json(err.message);
   }
 };

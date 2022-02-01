@@ -5,7 +5,7 @@ import { mapKeys } from "lodash";
 const timelogcorrection = (set, get) => ({
   timelogCorrections: {},
   selectedTimelogCorrection: {},
-  getTimelogCorrections: async (data) => {
+  getTimelogCorrections: async () => {
     try {
       const response = await api.get("/timelog/correction");
       set(
@@ -22,9 +22,16 @@ const timelogcorrection = (set, get) => ({
         produce((state) => {
           state.selectedTimelogCorrection = response.data;
           state.timelogCorrections[data.id] = response.data;
+          state.status.message = response.data?.error;
         })
       );
-    } catch (err) {}
+    } catch (err) {
+      set(
+        produce((state) => {
+          state.status.message = err.message;
+        })
+      );
+    }
   },
   updateTimelogCorrection: async (data) => {
     try {

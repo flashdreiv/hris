@@ -28,14 +28,23 @@ const getReportSummary = async (req, res) => {
       //Status
       const status = checkStatus(timelog);
       //hour Duration
-      const hourDuration =
-        status === NTO
-          ? "None"
-          : Math.abs(getTimeDifference(timeIn, timeOut) / 60).toFixed(2);
+      //Check status NTO to prevent error
+      if (status === NTO) {
+        return {
+          hours: "None",
+          ot_ut: "None",
+          status,
+          ...timelog.toObject(),
+        };
+      }
+      const hourDuration = Math.abs(
+        getTimeDifference(timeIn, timeOut) / 60
+      ).toFixed(2);
       //Overtime/Undertime
       let duration = intervalToDuration({ start: timeIn, end: timeOut });
       duration = duration.hours + "." + duration.minutes;
-      const ot_ut = status === NTO ? "None" : (duration - 8).toFixed(2);
+      const ot_ut = (duration - 8).toFixed(2);
+
       return {
         hours: hourDuration,
         ot_ut,

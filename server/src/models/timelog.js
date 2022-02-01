@@ -15,6 +15,7 @@ const TimeLogSchema = mongoose.Schema({
   },
   timeOut: {
     type: Date,
+    required: false,
   },
   user: {
     type: Schema.Types.ObjectId,
@@ -22,7 +23,7 @@ const TimeLogSchema = mongoose.Schema({
   },
 });
 
-TimeLogSchema.index({ timeIn: 1, user: 1 }, { uniqe: true });
+TimeLogSchema.index({ timeIn: 1, user: 1 }, { unique: true });
 
 const TimeLog = mongoose.model("timelogs", TimeLogSchema);
 

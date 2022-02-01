@@ -1,6 +1,6 @@
 import TimeLog from "../models/timelog.js";
 import User from "../models/user.js";
-import { endOfDay, startOfDay } from "date-fns";
+import { endOfDay, startOfDay, isEqual } from "date-fns";
 import { findExactDate } from "../utils/date.js";
 
 const getTimeLogs = async (req, res) => {
@@ -47,12 +47,19 @@ const getTimeLog = async (req, res) => {
 const timeIn = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
-    const { timeIn } = req.body;
+    const timeIn = new Date();
+    //find existing timeIn
+    const timeInAlreadyExist = await findExactDate(timeIn, TimeLog);
+    if (timeInAlreadyExist) {
+      return res.status(403).json({
+        error: "Timein Already Exist",
+      });
+    }
     const newTimelog = new TimeLog({ user, timeIn });
     await newTimelog.save();
-    res.status(201).json(newTimelog);
+    return res.status(201).json(newTimelog);
   } catch (err) {
-    res.status(400).json(err);
+    return res.status(400).json(err);
   }
 };
 

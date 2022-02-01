@@ -7,7 +7,6 @@ export const checkStatus = (timelog) => {
   const timeIn = timelog.timeIn;
   const timeOut = timelog.timeOut;
 
-  //Check NTO
   if (!timeOut) return NTO;
   if (timeIn.getHours() > 8) return LTI;
   if (!timeOut && !timeIn) return LTI;

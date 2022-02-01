@@ -29,9 +29,9 @@ const timelog = (set, get) => ({
     }
   },
 
-  timeIn: async (timeIn) => {
+  timeIn: async () => {
     try {
-      const response = await api.post("/timelog", { timeIn });
+      const response = await api.post("/timelog");
       set(
         produce((state) => {
           state.status.loading = true;

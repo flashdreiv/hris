@@ -9,10 +9,10 @@ import report from "./report";
 
 const store = (set, get) => ({
   ...auth(set, get),
+  ...uistate(set, get),
   ...timelog(set, get),
   ...timelogcorrection(set, get),
   ...user(set, get),
-  ...uistate(set, get),
   ...report(set, get),
 });
 

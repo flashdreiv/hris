@@ -1,5 +1,5 @@
 const uistate = (set, get) => ({
-  status: { loading: false, errorMessage: null, successMessage: null },
+  status: { loading: false, message: "Default message" },
 });
 
 export default uistate;

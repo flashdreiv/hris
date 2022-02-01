@@ -3,7 +3,6 @@ import { Typography, Table, Form } from "antd";
 import { timelogReportsColumn } from "../atoms/tablecolumns";
 import ReportForm from "../molecules/ReportForm";
 import ReportStatistics from "../molecules/ReportStatistics";
-import moment from "moment";
 import useStore from "../../store";
 
 const { Title } = Typography;
@@ -34,23 +33,11 @@ const Reports = () => {
         console.log(err);
       });
   };
-  // const dateNow = moment(new Date());
-  const initialValues = {
-    rangePicker: [
-      moment(new Date("2021-12-01")),
-      moment(new Date("2021-12-31")),
-    ],
-  };
 
   return (
     <div>
-      {console.log(timelogReportsColumn)}
       <Title level={5}>Select Date Range</Title>
-      <ReportForm
-        form={form}
-        handleSubmit={handleSubmit}
-        initialValues={initialValues}
-      />
+      <ReportForm form={form} handleSubmit={handleSubmit} />
       <Table
         size="small"
         columns={timelogReportsColumn}

@@ -17,7 +17,7 @@ const TimeActionButton = () => {
   const handleTimeAction = () => {
     switch (timelogStatus) {
       case "Time-in":
-        timeIn(newDate);
+        timeIn();
         break;
       case "Time-out":
         timeOut(newDate);

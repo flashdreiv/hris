@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import CorrectionForm from "../molecules/CorrectionForm";
-import { Table, Modal, Button, Form, message } from "antd";
+import { Table, Button, Form, message } from "antd";
 import { timelogCorrectionColumn } from "../atoms/tablecolumns";
+import TLCModalForm from "../molecules/TLCModalForm";
 import useStore from "../../store";
 
 const Correction = () => {
@@ -20,6 +20,7 @@ const Correction = () => {
     (state) => state.deleteTimelogCorrection
   );
   const timelogCorrections = useStore((state) => state.timelogCorrections);
+  const status = useStore((state) => state.status);
   const [selectedTLC, setSelectedTLC] = useState({});
 
   const [form] = Form.useForm();
@@ -42,25 +43,25 @@ const Correction = () => {
     };
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (values) => {
     setConfirmLoading(true);
-    form
-      .validateFields()
-      .then((values) => {
-        if (modal.type === "add") {
-          addTimelogCorrection(parseSubmission(values));
-          form.resetFields();
-          message.success("Timelog correction saved successfully");
-        } else {
-          updateTimelogCorrection(parseSubmission(values));
-          message.success("Timelog correction updated successfully");
-        }
-        setModal({ open: false });
-      })
-      .catch((err) => {
-        message.error("Unable to save that one " + err);
-      });
-    setConfirmLoading(false);
+    if (modal.type === "add") {
+      const key = "D";
+      message.loading({ content: "Loading..", key });
+      addTimelogCorrection(parseSubmission(values));
+      setConfirmLoading(false);
+      message.error({ content: status.message, key, duration: 2 });
+    } else {
+      updateTimelogCorrection(parseSubmission(values));
+      message.success("Timelog correction updated successfully");
+    }
+    // form
+    //   .validateFields()
+    //   .then((values) => {})
+    //   .catch(() => {
+    //     message.error("Unable to save that one");
+    //   });
+    setModal({ open: false });
   };
 
   const deleteTLC = (id) => {
@@ -76,29 +77,25 @@ const Correction = () => {
 
   const renderModal = () => {
     return modal.type === "add" ? (
-      <Modal
-        title="Timelog Correction"
+      <TLCModalForm
+        title="Timelog Creation"
         visible={modal.open}
-        onOk={handleSubmit}
-        okText="Submit"
         confirmLoading={confirmLoading}
         onCancel={() => setModal({ type: "add", open: false })}
-        forceRender
-      >
-        <CorrectionForm approvers={Object.values(users)} form={form} />
-      </Modal>
+        form={form}
+        approvers={Object.values(users)}
+        handleSubmit={handleSubmit}
+      />
     ) : (
-      <Modal
+      <TLCModalForm
         title="Edit Correction"
         visible={modal.open}
-        onOk={handleSubmit}
-        okText="Save"
         confirmLoading={confirmLoading}
-        forceRender
         onCancel={() => setModal({ open: false })}
-      >
-        <CorrectionForm approvers={Object.values(users)} form={form} />
-      </Modal>
+        form={form}
+        approvers={Object.values(users)}
+        handleSubmit={handleSubmit}
+      />
     );
   };
 

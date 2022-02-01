@@ -20,7 +20,7 @@ const findExactDate = async (date, Schema) => {
   } else {
     const start = startOfDay(new Date());
     const end = endOfDay(new Date());
-    const exactDate = Schema.findOne({
+    const exactDate = await Schema.findOne({
       createdAt: {
         $gte: start,
         $lt: end,
@@ -49,9 +49,12 @@ const getTotalHours = (timelogs) => {
   const timeDuration = timelogs.map((timelog) => {
     const start = new Date(timelog.timeIn);
 
+    if (!timelog.timeOut) return;
+    const end = new Date(timelog.timeOut);
+
     let duration = intervalToDuration({
       start,
-      end: new Date(timelog.timeOut),
+      end,
     });
     /*
     Calculate breakhours
